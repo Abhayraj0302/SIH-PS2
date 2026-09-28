@@ -1,0 +1,11 @@
+# Filled in by Engine 3/7 once tiling + survey-based split exist.
+path: data/unified_split
+train: images/train
+val: images/val
+test: images/test   # held-out survey(s); do not touch until final evaluation
+
+names:
+  0: pipe
+  1: shipwreck
+  2: mine_like
+  3: crab_pot
