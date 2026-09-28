@@ -14,7 +14,6 @@ const sections = [
 
 export default function SectionNav() {
   const [activeSection, setActiveSection] = useState<string>(sections[0].id);
-  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [cursorReady, setCursorReady] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -80,7 +79,8 @@ export default function SectionNav() {
     };
   }, [unlockClickScroll, updateScrollState]);
 
-  const cursorTarget = hoveredSection ?? activeSection;
+  // Keep the sliding indicator tied to the current section, never to pointer hover.
+  const cursorTarget = activeSection;
   useLayoutEffect(() => {
     const moveCursor = () => {
       const nav = navRef.current;
@@ -108,7 +108,6 @@ export default function SectionNav() {
 
     isClickScrollingRef.current = true;
     setActiveSection(id);
-    setHoveredSection(null);
     if (clickUnlockRef.current !== undefined) window.clearTimeout(clickUnlockRef.current);
     clickUnlockRef.current = window.setTimeout(() => {
       isClickScrollingRef.current = false;
@@ -124,7 +123,7 @@ export default function SectionNav() {
       <span className="section-nav-logo" aria-hidden="true"><i /><i /><i /></span>
       <span className="section-nav-brand-copy"><strong>MARINE AI</strong><small>DEBRIS INTELLIGENCE</small></span>
     </a>
-    <div className="section-nav-clip" onMouseLeave={() => setHoveredSection(null)}>
+    <div className="section-nav-clip">
       <nav ref={navRef} className="section-nav" aria-label="Page sections">
         {cursorReady && <motion.span aria-hidden="true" className="section-nav-cursor" style={{ x: springX, width: springWidth }} />}
         {sections.map(({ id, label }) => <a
@@ -133,9 +132,6 @@ export default function SectionNav() {
           href={`#${id}`}
           aria-current={activeSection === id ? "location" : undefined}
           className={activeSection === id ? "is-active" : undefined}
-          onMouseEnter={() => setHoveredSection(id)}
-          onFocus={() => setHoveredSection(id)}
-          onBlur={() => setHoveredSection(null)}
           onClick={(event) => navigateTo(event, id)}
         >{label}</a>)}
       </nav>
