@@ -1,0 +1,3 @@
+export default function NaturalVsManmade() {
+  return <section className="panel classification-panel"><div className="section-heading"><div><span className="eyebrow">MODEL CLASSIFICATION · DEMO</span><h2>Natural vs Man-Made</h2></div><span className="classification-score">91% <small>confidence</small></span></div><div className="class-columns"><div><h3>Natural</h3><p>◈ Rock</p><p>♧ Coral</p><p>⌁ Sand ripple</p></div><div><h3>Man-made</h3><p>⌘ Ghost net</p><p>⚙ Metal</p><p>⫶ Cable</p></div></div><div className="class-output"><span>AI OUTPUT</span><strong>MAN-MADE <b>— 91%</b></strong></div></section>;
+}
