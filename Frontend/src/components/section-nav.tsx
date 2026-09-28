@@ -18,6 +18,7 @@ export default function SectionNav() {
   const [cursorReady, setCursorReady] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const tabRefs = useRef(new Map<string, HTMLAnchorElement>());
+  const cursorInitializedRef = useRef(false);
   const isClickScrollingRef = useRef(false);
   const clickUnlockRef = useRef<number | undefined>(undefined);
   const cursorX = useMotionValue(0);
@@ -86,8 +87,15 @@ export default function SectionNav() {
       const nav = navRef.current;
       const tab = tabRefs.current.get(cursorTarget);
       if (!nav || !tab) return;
-      cursorX.set(tab.offsetLeft);
-      cursorWidth.set(tab.offsetWidth);
+      const x = tab.offsetLeft;
+      const width = tab.offsetWidth;
+      cursorX.set(x);
+      cursorWidth.set(width);
+      if (!cursorInitializedRef.current) {
+        springX.jump(x);
+        springWidth.jump(width);
+        cursorInitializedRef.current = true;
+      }
       setCursorReady(true);
     };
     moveCursor();
@@ -99,7 +107,7 @@ export default function SectionNav() {
       observer?.disconnect();
       window.removeEventListener("resize", moveCursor);
     };
-  }, [cursorTarget, cursorX, cursorWidth]);
+  }, [cursorTarget, cursorX, cursorWidth, springX, springWidth]);
 
   const navigateTo = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
     event.preventDefault();
