@@ -49,6 +49,7 @@ export default function App() {
   };
 
   return <main className="page-content scroll-page">
+    <div className="mock-mode-banner" role="status">DEMO DATA — Existing dashboard detections and coordinates are illustrative only; they are not detector output or real locations. Engine 4 integration is pending.</div>
     <SectionNav />
     <section id="dashboard" className="scroll-section scroll-section-hero"><DashboardPage onViewSonar={viewSonar} onSelectDetection={selectDetection} /></section>
     <section id="sonar-analysis" className="scroll-section"><SonarAnalysisPage detections={demoDetections} selectedDetectionId={selectedDetectionId} onSelectDetection={selectDetection} preferences={preferences} onPreferencesChange={changePreferences} /></section>

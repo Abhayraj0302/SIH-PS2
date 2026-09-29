@@ -1,4 +1,5 @@
 import type { AnalysisPreferences, Detection } from "../state/app-types";
+import type { AnalysisDetection } from "../services/engine8-api";
 
 type Props = {
   detections: ReadonlyArray<Detection>;
@@ -9,11 +10,14 @@ type Props = {
   onImageError: () => void;
   zoom: number;
   compare: boolean;
+  apiDetections?: ReadonlyArray<AnalysisDetection> | null;
+  apiImageSize?: { width: number; height: number } | null;
+  onSelectApiDetection?: (id: string) => void;
 };
 
 const markerPositions = [[20, 38], [47, 63], [70, 30], [81, 70], [34, 76], [61, 48]] as const;
 
-export default function SonarViewer({ detections, selectedDetectionId, onSelectDetection, preferences, imageUrl, onImageError, zoom, compare }: Props) {
+export default function SonarViewer({ detections, selectedDetectionId, onSelectDetection, preferences, imageUrl, onImageError, zoom, compare, apiDetections = null, apiImageSize = null, onSelectApiDetection }: Props) {
   return <div className={`sonar-viewer${compare ? " is-comparing" : ""}`}>
     <div className="viewer-toolbar"><span><i /> SIDE-SCAN SONAR · SURVEY_024 <small>DEMO IMAGE</small></span><span>{zoom}% <small>ZOOM</small></span></div>
     <div className="sonar-canvas" style={{ "--sonar-zoom": zoom / 100 } as React.CSSProperties}>
@@ -21,7 +25,11 @@ export default function SonarViewer({ detections, selectedDetectionId, onSelectD
       <div className="scan-grid" aria-hidden="true" />
       {preferences.showAcousticShadows && <div className="shadow-highlight" aria-hidden="true" />}
       {compare && <div className="compare-split" aria-hidden="true"><span>JAN 2026 · BASELINE</span><span>JUN 2026 · CURRENT</span></div>}
-      {preferences.showDetections && detections.slice(0, markerPositions.length).map((detection, index) => {
+      {preferences.showDetections && imageUrl && apiDetections && apiImageSize && apiDetections.map((detection) => {
+        const [x1, y1, x2, y2] = detection.bbox;
+        return <button key={detection.detection_id} className="api-detection-box" style={{ left: `${100*x1/apiImageSize.width}%`, top: `${100*y1/apiImageSize.height}%`, width: `${100*(x2-x1)/apiImageSize.width}%`, height: `${100*(y2-y1)/apiImageSize.height}%` }} aria-label={`${detection.class_name}, raw score ${detection.raw_confidence.toFixed(3)}`} onClick={() => onSelectApiDetection?.(detection.detection_id)}><span>{detection.class_name} · {detection.raw_confidence.toFixed(2)} raw</span></button>;
+      })}
+      {preferences.showDetections && !imageUrl && detections.slice(0, markerPositions.length).map((detection, index) => {
         const [left, top] = markerPositions[index];
         if (detection.confidence !== null && detection.confidence < preferences.confidenceThreshold) return null;
         return <button key={detection.id} className={`sonar-marker priority-${detection.priority}${selectedDetectionId === detection.id ? " is-selected" : ""}`} style={{ left: `${left}%`, top: `${top}%` }} aria-label={`Detection ${detection.id}, ${detection.type}, ${detection.confidence ?? "unknown"}% confidence`} onClick={() => onSelectDetection(detection.id)}><span>{detection.id}</span></button>;

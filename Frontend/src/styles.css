@@ -472,6 +472,12 @@ button, a { font: inherit; }
 .analysis-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(280px, .8fr); align-items: start; gap: 15px; }
 .analysis-main, .analysis-aside { min-width: 0; }
 .sonar-viewer { overflow: hidden; border: 1px solid rgba(80,189,191,.2); border-radius: 7px; background: #07131b; box-shadow: 0 16px 45px rgba(0,0,0,.16); }
+.api-detection-box { position: absolute; z-index: 4; border: 2px solid #ff806b; background: rgba(255,128,107,.08); color: white; cursor: pointer; }
+.api-detection-box span { position: absolute; top: -25px; left: -2px; padding: 3px 6px; background: #692d2b; color: white; font-size: 11px; white-space: nowrap; }
+.mock-mode-banner { margin: 12px 0; padding: 12px 16px; border: 1px solid rgba(255,190,90,.48); border-radius: 8px; background: rgba(120,75,15,.2); color: #ffe0a5; font-size: 13px; }
+.api-result { margin-top: 20px; padding: 20px; }
+.api-detection-detail { padding: 16px 0; border-top: 1px solid rgba(171,204,220,.16); }
+.evidence-crop { display: block; max-width: 220px; max-height: 180px; border: 1px solid rgba(67,224,208,.35); object-fit: contain; }
 .viewer-toolbar, .viewer-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; padding: 0 14px; color: #9fb2ba; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; }
 .viewer-toolbar > span:first-child { display: flex; align-items: center; gap: 8px; }
 .viewer-toolbar small, .viewer-foot { color: #67818e; }
